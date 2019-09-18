@@ -194,16 +194,16 @@ class Events_Admin {
 		}
 
 		if ( $query->get( 'orderby' ) === 'event_date' ) {
-			$query->set( 'orderby', 'meta_value' );
 			$query->set( 'meta_key', 'event_date' );
+			$query->set( 'orderby', 'meta_value' );
 		}
 		if ( $query->get( 'orderby' ) === 'event_time' ) {
-			$query->set( 'orderby', 'meta_value' );
 			$query->set( 'meta_key', 'event_time' );
+			$query->set( 'orderby', 'meta_value' );
 		}
 		if ( $query->get( 'orderby' ) === 'event_location' ) {
-			$query->set( 'orderby', 'meta_value' );
 			$query->set( 'meta_key', 'event_location' );
+			$query->set( 'orderby', 'meta_value' );
 		}
 
 	}
@@ -225,12 +225,13 @@ class Events_Admin {
 			// Show the selection interface
 			display_label( $meta_key, $titles[ $meta_key ] );
 			$required = $meta['required'];
-			if ($meta_key == 'event_time') {
-				display_time_input( $meta_key, $meta_value, $required);
+			if ( $meta_key == 'event_date' ) {
+				display_input( 'date', $meta_key, $meta_value, $required);
+			} else if ( $meta_key == 'event_time' ) {
+				display_input( 'time', $meta_key, $meta_value, $required );
 			} else {
-				display_text_input( $meta_key, $meta_value, $required );
+				display_input( 'text', $meta_key, $meta_value, $required );
 			}
-
 		}
 
 	}

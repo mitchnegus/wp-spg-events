@@ -185,5 +185,21 @@ class Events_Public {
 
 	}
 
+	/**
+	 * Define the ordering of the custom events posts.
+	 *
+	 * (Executed by loader class)
+	 *
+	 * @param    WP_QUERY    $query 							The post query to sort by.
+	 */
+	public function event_posts_archive_orderby( $query ) {
+
+		if ( $query->is_main_query() && is_post_type_archive( 'events' ) ) {
+			$query->set( 'meta_key', 'event_date' );
+			$query->set( 'orderby', 'meta_value');
+		}
+
+	}
+	
 }
 

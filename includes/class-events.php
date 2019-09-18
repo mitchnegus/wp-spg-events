@@ -83,7 +83,7 @@ class Events {
 		 	array('meta_key' => 'event_location', 'required' => false)
 		);
 		$this->meta_titles = array(
-			'event_date'       => 'Date (YYYY-MM-DD)',
+			'event_date'       => 'Date',
 			'event_time'       => 'Time',
 			'event_location'   => 'Location'
 		);		
@@ -183,6 +183,7 @@ class Events {
 		$this->loader->add_action( 'init', $plugin_public, 'register_speakers_taxonomy' );
 		// Use custom templates for the event pages
 		$this->loader->add_filter( 'archive_template', $plugin_public, 'use_event_archive_template' );
+		$this->loader->add_action( 'pre_get_posts', $plugin_public, 'event_posts_archive_orderby' );
 
 	}
 

@@ -60,7 +60,7 @@ if ( ! defined( 'WSE_URL' ) ) {
  *
  * This action is documented in includes/class-events-activator.php
  */
-function activate_projects() {
+function activate_events() {
 	require_once WSE_PATH . 'includes/class-events-activator.php';
 	Events_Activator::activate();
 }
@@ -69,13 +69,13 @@ function activate_projects() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-events-deactivator.php
  */
-function deactivate_projects() {
+function deactivate_events() {
 	require_once WSE_PATH . 'includes/class-events-deactivator.php';
-	Projects_Deactivator::deactivate();
+	Events_Deactivator::deactivate();
 }
 
-\register_activation_hook( __FILE__, '\SPG_Events\activate_projects' );
-\register_deactivation_hook( __FILE__, '\SPG_Events\deactivate_projects' );
+\register_activation_hook( __FILE__, '\SPG_Events\activate_events' );
+\register_deactivation_hook( __FILE__, '\SPG_Events\deactivate_events' );
 
 /**
  * The core plugin class that is used to define internationalization,

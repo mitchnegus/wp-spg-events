@@ -194,9 +194,16 @@ class Events_Public {
 	 */
 	public function event_posts_archive_orderby( $query ) {
 
-		if ( $query->is_main_query() && is_post_type_archive( 'events' ) ) {
-			$query->set( 'meta_key', 'event_date' );
-			$query->set( 'orderby', 'meta_value');
+		$non_admin_main_query = ( ! is_admin() && $query->is_main_query() );
+		if ( $non_admin_main_query && is_post_type_archive( 'events' ) ) {
+			$query->set( 'meta_query', array(
+				'event_date' => array( 'key' => 'event_date' ),
+				'event_time' => array( 'key' => 'event_time' )
+			));
+			$query->set( 'orderby', array(
+				'event_date' => 'DESC',
+				'event_time' => 'DESC'
+			));
 		}
 
 	}

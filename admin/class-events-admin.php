@@ -195,15 +195,15 @@ class Events_Admin {
 
 		if ( $query->get( 'orderby' ) === 'event_date' ) {
 			$query->set( 'meta_key', 'event_date' );
-			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'orderby', 'meta_value_num' );
 		}
 		if ( $query->get( 'orderby' ) === 'event_time' ) {
 			$query->set( 'meta_key', 'event_time' );
-			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'orderby', 'meta_value_num' );
 		}
 		if ( $query->get( 'orderby' ) === 'event_location' ) {
 			$query->set( 'meta_key', 'event_location' );
-			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'orderby', 'meta_value_num' );
 		}
 
 	}

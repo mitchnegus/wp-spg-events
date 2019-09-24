@@ -13,4 +13,6 @@
 
 /* events
 ------------------------------*/
-
+.wp-spg-events div.google-calendar {
+	text-align: center;
+}

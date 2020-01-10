@@ -119,6 +119,7 @@ class Events_Public {
 			'add_new_item' 	=> __( 'Add New Event' ),
 			'edit_item' 		=> __( 'Edit Event' ),
 			'view_item'     => __( 'View Event' ),
+			'view_items'    => __( 'View Events' ),
 			'search_items'  => __( 'Search Events' )
 		);
 

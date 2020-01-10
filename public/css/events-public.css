@@ -16,3 +16,103 @@
 .wp-spg-events div.google-calendar {
 	text-align: center;
 }
+
+.wp-spg-events div.timeline {
+	border-left: 5px solid #dedede;
+	margin-left: 10px;
+	padding-left: 3px;
+}
+
+.wp-spg-events div.event {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.wp-spg-events div.timeline-circle {
+	height: 30px;
+	width: 30px;
+	margin-left: -20px;
+	border: 3px solid white;
+	border-radius: 50%;
+	background-color: #cecece;
+}
+
+.wp-spg-events div.event-block-triangle {
+	width: 0;
+	height: 0;
+	border-top: 35px solid transparent;
+	border-right: 20px solid #f7f7f7;
+	border-bottom: 35px solid transparent;
+	z-index: 1;
+}
+
+.wp-spg-events div.event-block {
+	min-height: 100px;
+	width: 80%;
+	margin: 15px 0;
+	padding: 15px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 4px #dddddd;
+	background-color: #f7f7f7;
+}
+
+
+.wp-spg-events div.event-info {
+	display: flex;
+	justify-content: space-between;
+}
+
+.wp-spg-events div.event-info div.event-description {
+	margin-right: 15px;
+}
+
+.wp-spg-events div.event-speakers {
+	display: flex;
+	margin-bottom: 20px;
+	font-size: 11pt;
+}
+
+.wp-spg-events div.event-speakers div.speaker-list {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.wp-spg-events div.event-speakers div.speaker {
+	display: flex;
+	align-items: center;
+	margin: 0 4px 4px;
+	padding: 0 10px;
+	border: 1px solid #dedede;
+	border-radius: 15px;
+	background-color: #dddddd;
+	white-space: nowrap;
+}
+
+.wp-spg-events div.speaker div.speaker-name {
+	margin: 2px 0;
+	padding: 0 5px;
+	border-right: 1px solid #aaaaaa;
+}
+
+.wp-spg-events div.speaker div.speaker-thumbnail {
+	display: flex;
+	align-items: center;
+	height: 20px;
+	width: 20px;
+	margin: 0 5px;
+}
+
+.wp-spg-events div.event-info p.event-setting {
+	margin: 0;
+	font-size: 10pt;
+	font-style: italic;
+}
+
+.wp-spg-events div.event-info img.event-thumbnail {
+	height: 100px;
+	width: 100px;
+	max-width: none;
+	margin: 10px;
+	border-radius: 5px;
+}

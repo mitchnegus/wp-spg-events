@@ -114,9 +114,22 @@ get_header();
 	
 															<div class="speaker">
 																<div class="speaker-name"><?php echo esc_html( $speaker_name ); ?></div>
-																<div class="speaker-thumbnail">
-																	<img class="speaker-thumbnail" src="https://sciencepolicy.berkeley.edu/wp-content/plugins/wp-member-bios/img/headshot_template.png">
-																</div>
+
+																<?php
+																$speaker_id = $speaker->term_id;
+																$speaker_photo_id = get_term_meta( $speaker_id, 'speaker_thumbnail', $single = true );
+																if ( ! empty( $speaker_photo_id ) ) {
+																	$speaker_photo_url = wp_get_attachment_image_src( $speaker_photo_id )[0];
+																	?>
+
+																	<div class="speaker-thumbnail">
+																		<img class="speaker-thumbnail" src="<?php echo esc_url( $speaker_photo_url ); ?>">
+																	</div>
+
+																	<?php
+																}
+																?>
+
 															</div>
 	
 															<?php												

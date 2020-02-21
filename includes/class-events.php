@@ -76,16 +76,20 @@ class Events {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'spg-events';
-		// Create arrays of meta keys that are assigned to custom project posts
+		// Create arrays of meta keys that are assigned to custom event posts and speakers
 		$this->event_meta = array(
 			array('meta_key' => 'event_date', 'required' => true),
 			array('meta_key' => 'event_time', 'required' => false),
 		 	array('meta_key' => 'event_location', 'required' => false)
 		);
+		$this->speaker_meta = array(
+			array('meta_key' => 'speaker_thumbnail'),
+		);
 		$this->meta_titles = array(
-			'event_date'       => 'Date',
-			'event_time'       => 'Time',
-			'event_location'   => 'Location'
+			'event_date'        => 'Date',
+			'event_time'        => 'Time',
+			'event_location'    => 'Location',
+			'speaker_thumbnail' => 'Photo'
 		);		
 
 		// Load plugin dependencies and set actions and filters for hooks
@@ -146,12 +150,20 @@ class Events {
 			$this->get_plugin_name(),
 			$this->get_version(),
 			$this->get_event_meta(),
+			$this->get_speaker_meta(),
 			$this->get_meta_titles()
 	 	);
 
+		// Set admin area styles
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		// Provide admin area controls for event custom posts
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'add_admin_fields');
+		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'add_admin_event_fields');
 		$this->loader->add_action( 'save_post', $plugin_admin, 'save_event_details');
+		$this->loader->add_action( 'speakers_add_form_fields', $plugin_admin, 'add_admin_speaker_fields');
+		$this->loader->add_action( 'speakers_edit_form_fields', $plugin_admin, 'edit_admin_speaker_fields');
+		$this->loader->add_action( 'create_speakers', $plugin_admin, 'save_speaker_details');
+		$this->loader->add_action( 'edit_speakers', $plugin_admin, 'save_speaker_details');
 		// Update the columns on the browse event page
 		$this->loader->add_action( 'manage_events_posts_custom_column', $plugin_admin, 'fill_event_columns', 10, 2 );
 		$this->loader->add_filter( 'manage_events_posts_columns', $plugin_admin, 'set_event_columns' );
@@ -237,10 +249,20 @@ class Events {
 	 * Retrieve the custom event post meta keys.
 	 *
 	 * @since     1.0.0
-	 * @return    string    An array of custom post meta keys used by the plugin.
+	 * @return    string    An array of event meta keys used by the plugin.
 	 */
 	public function get_event_meta() {
 		return $this->event_meta;
+	}
+
+	/**
+	 * Retrieve the custom speaker taxonomy meta keys.
+	 *
+	 * @since     1.0.0
+	 * @return    string    An array of speaker meta keys used by the plugin.
+	 */
+	public function get_speaker_meta() {
+		return $this->speaker_meta;
 	}
 
 	/**

@@ -1,0 +1,24 @@
+/**
+ * Plugin Name: SPG Events
+ * Author: Mitch Negus
+ * Author URI: www.mitchnegus.com
+ * Text Domain: events
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * All of the CSS for the admin area is included in this file.
+ *
+ * Copyright (C) 2019 Mitch Negus
+ */
+
+/* events
+------------------------------*/
+.wp-spg-events #event-info_meta div.event-info {
+	margin-bottom: 5px;
+}
+
+.wp-spg-events #image-preview {
+	height: 100px;
+	width: 100px;
+	border: 1px solid gray;
+}

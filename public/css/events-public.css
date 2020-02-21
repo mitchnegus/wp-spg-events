@@ -90,17 +90,16 @@
 }
 
 .wp-spg-events div.speaker div.speaker-name {
-	margin: 2px 0;
-	padding: 0 5px;
-	border-right: 1px solid #aaaaaa;
+	margin: 2px 5px;
 }
 
 .wp-spg-events div.speaker div.speaker-thumbnail {
 	display: flex;
 	align-items: center;
-	height: 20px;
-	width: 20px;
-	margin: 0 5px;
+	width: 25px;
+	margin-right: 5px;
+	padding-left: 5px;
+	border-left: 1px solid #aaaaaa;
 }
 
 .wp-spg-events div.event-info p.event-setting {

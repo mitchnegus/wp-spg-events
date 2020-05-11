@@ -316,7 +316,7 @@ class Events_Admin {
 	 *
 	 * @since 1.0.0
 	 */
-	public function present_event_metabox() {
+	public function present_event_metabox( $post ) {
 
 		$titles = $this->meta_titles;
 		$post_meta = get_post_meta( $post->ID );

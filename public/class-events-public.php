@@ -55,10 +55,11 @@ class Events_Public {
 	 * @param    array     $options           An array of the options set and added to the database by the plugin.
 	 * @param    array     $event_meta       An array of the meta fields for the custom project post type.
 	 */
-	public function __construct( $plugin_name, $version, $event_meta ) {
+	public function __construct( $plugin_name, $version, $options, $event_meta ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->plugin_options = $options;
 		$this->event_meta = $event_meta;
 
 	}

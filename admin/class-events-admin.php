@@ -56,10 +56,13 @@ class Events_Admin {
 	 * @param      array     $event_meta        An array of the meta fields for the custom event post type.
 	 * @param      array     $meta_titles       An array of the meta fields for the custom event post type.
 	 */
-	public function __construct( $plugin_name, $version, $event_meta, $speaker_meta, $meta_titles ) {
+	public function __construct( $plugin_name, $version, $options, $event_meta, $speaker_meta, $meta_titles ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->settings_page_slug = 'spg-events-settings';
+		$this->option_group = 'spg-events-option-group';
+		$this->plugin_options = $options;
 		$this->events_custom_post_type = 'events';
 		$this->event_meta = $event_meta;
 		$this->speakers_custom_taxonomy = 'speakers';
@@ -109,6 +112,40 @@ class Events_Admin {
 			'events_admin_vars',
 			array('image_attachment_id' => 267)
 		);
+
+	}
+
+  /**
+	*  Include setup menu page for the plugin in the admin area.
+	*
+	* (Executed by loader class)
+	*
+	* @since    1.0.0
+	*/
+	public function add_settings_page() {
+
+  	$page_title = 'SPG Events Settings';
+  	$menu_title = 'Events';
+  	add_options_page(
+  		$page_title,
+  		$menu_title,
+  		'manage_options',
+  		$this->settings_page_slug,
+  		[$this, 'add_settings_options']
+  	);
+	}
+ 
+	/**
+	 * Add settings (associated with sections) that are available to a an admin.
+   *
+   * (Executed by loader class)
+   *
+   * @since    1.0.0
+   */
+	public function add_settings() {
+
+		$this->register_settings();
+		$this->add_semester_settings();
 
 	}
 
@@ -312,6 +349,108 @@ class Events_Admin {
 	}
 
 	/**
+	 * Display all registered menu items on the settings page.
+	 *
+	 * @since    1.0.0
+	 */
+	public function add_settings_options() {
+
+	  if ( ! current_user_can( 'manage_options' ) ) {
+	    wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	  }
+
+    display_settings( $this->option_group, $this->settings_page_slug );
+
+  }
+
+	/**
+	 * Register new settings for the plugin's settings page
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function register_settings() {
+	
+		foreach ( $this->plugin_options as $option ) {
+			register_setting( $this->option_group, $option );
+		}
+	}
+
+	/**
+	 * Add a section with fields for managing the semester start and end dates.
+	 *
+	 * @since 	1.0.0
+	 * @access 	private
+	 */
+	private function add_semester_settings() {
+
+		$section_id = 'semester-dates';
+		$section_label = 'Semester Dates';
+		add_settings_section(
+			$section_id,
+			$section_label,
+			'SPG_Events\display_semester_dates_section',
+			$this->settings_page_slug
+		);
+
+		$fall_semester_start_id = $this->plugin_options['fall_semester_start'];
+		$fall_semester_start_label = 'Fall Semester Start';
+		add_settings_field(
+			$fall_semester_start_id,
+			$fall_semester_start_label,
+			[$this, 'present_date_input_option'],
+			$this->settings_page_slug,
+			$section_id,
+			array( 'label_for' => $fall_semester_start_id )
+		);
+		$fall_semester_end_id = $this->plugin_options['fall_semester_end'];
+		$fall_semester_end_label = 'Fall Semester End';
+		add_settings_field(
+			$fall_semester_end_id,
+			$fall_semester_end_label,
+			[$this, 'present_date_input_option'],
+			$this->settings_page_slug,
+			$section_id,
+			array( 'label_for' => $fall_semester_end_id )
+		);
+		$spring_semester_start_id = $this->plugin_options['spring_semester_start'];
+		$spring_semester_start_label = 'Spring Semester Start';
+		add_settings_field(
+			$spring_semester_start_id,
+			$spring_semester_start_label,
+			[$this, 'present_date_input_option'],
+			$this->settings_page_slug,
+			$section_id,
+			array( 'label_for' => $spring_semester_start_id )
+		);
+		$spring_semester_end_id = $this->plugin_options['spring_semester_end'];
+		$spring_semester_end_label = 'Spring Semester End';
+		add_settings_field(
+			$spring_semester_end_id,
+			$spring_semester_end_label,
+			[$this, 'present_date_input_option'],
+			$this->settings_page_slug,
+			$section_id,
+			array( 'label_for' => $spring_semester_end_id )
+		);
+	
+	}
+
+	/**
+	 * Present a text input for a date setting in the admin area.
+	 *
+	 * @since 1.0.0
+	 * @param    array      $args                 Information to include in the text input's HTML.
+	 */
+	public function present_date_input_option( $args ) {
+
+		$option_name = $args['label_for'];
+		$option_default = get_option( $option_name );
+		display_settings_text_input( 'date', $option_name, $option_default );
+
+	}
+
+	/**
 	 * Present a text input in an admin area metabox for managing event info.
 	 *
 	 * @since 1.0.0
@@ -327,7 +466,19 @@ class Events_Admin {
 			$meta_value = $post_meta[ $meta_key ][0];
 			// Show the selection interface
 			$required = $meta['required'];
-			if ( $meta_key == 'event_date' ) {
+			if ( $meta_key == 'event_semester' ) {
+				$orig_year = 2015;
+				$current_year = date( 'Y' );
+				$next_year = $current_year + 1;
+				$years = range( $orig_year, $next_year );
+				$semesters = array();
+				foreach ( $years as $year ) {
+					$semesters[] = $year . ' Fall';
+					$semesters[] = $year . ' Spring';
+					$semesters[] = $year . ' Summer';
+				}
+				display_event_meta_select( $meta_key, $meta_title, $meta_value, array_reverse( $semesters ) );
+			} else if ( $meta_key == 'event_date' ) {
 				display_event_meta_input( 'date', $meta_key, $meta_title, $meta_value, $required);
 			} else if ( $meta_key == 'event_time' ) {
 				display_event_meta_input( 'time', $meta_key, $meta_title, $meta_value, $required);

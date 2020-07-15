@@ -76,8 +76,18 @@ class Events {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'spg-events';
+		// Create an array of options that are added to the database by the plugin
+		//    -> Keys are the in-code reference names
+		//    -> Values are the option names in the database
+		$this->plugin_options = array(
+			'fall_semester_start'   => 'spg_fall_semester_start',
+			'fall_semester_end'     => 'spg_fall_semester_end',
+			'spring_semester_start' => 'spg_spring_semester_start',
+			'spring_semester_end'   => 'spg_spring_semester_end'
+		);
 		// Create arrays of meta keys that are assigned to custom event posts and speakers
 		$this->event_meta = array(
+			array('meta_key' => 'event_semester', 'required' => true),
 			array('meta_key' => 'event_date', 'required' => true),
 			array('meta_key' => 'event_time', 'required' => false),
 		 	array('meta_key' => 'event_location', 'required' => false)
@@ -86,6 +96,7 @@ class Events {
 			array('meta_key' => 'speaker_thumbnail'),
 		);
 		$this->meta_titles = array(
+			'event_semester'    => 'Semester',
 			'event_date'        => 'Date',
 			'event_time'        => 'Time',
 			'event_location'    => 'Location',
@@ -149,6 +160,7 @@ class Events {
 		$plugin_admin = new Events_Admin( 
 			$this->get_plugin_name(),
 			$this->get_version(),
+			$this->get_plugin_options(),
 			$this->get_event_meta(),
 			$this->get_speaker_meta(),
 			$this->get_meta_titles()
@@ -157,6 +169,9 @@ class Events {
 		// Set admin area styles
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		// Add admin area settings page
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_settings_page' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'add_settings' );
 		// Provide admin area controls for event custom posts
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'add_admin_event_fields');
 		$this->loader->add_action( 'save_post', $plugin_admin, 'save_event_details');
@@ -184,6 +199,7 @@ class Events {
 		$plugin_public = new Events_Public( 
 			$this->get_plugin_name(),
 			$this->get_version(),
+			$this->get_plugin_options(),
 			$this->get_event_meta()
 	 	);
 
@@ -244,6 +260,16 @@ class Events {
 	public function get_version() {
 		return $this->version;
 	}
+
+	/**
+	 * Retrieve the options that are added to the database by the plugin.
+	 *
+	 * @since     1.0.0
+	 * @return    string    An array of options that are set by the plugin.
+	 */
+	public function get_plugin_options() {
+	    return $this->plugin_options;
+  }
 
 	/**
 	 * Retrieve the custom event post meta keys.

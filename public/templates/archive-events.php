@@ -83,6 +83,7 @@ get_header();
 							$post_id = $post->ID;
 							$post_content = $post->post_content;
 							$terms = get_the_terms( $post, 'speakers' );
+							$event_period = get_post_meta( $post_id, 'event_period', true);
 							$event_date = get_post_meta( $post_id, 'event_date', true);
 							$event_time = get_post_meta( $post_id, 'event_time', true);
 							$event_location = get_post_meta( $post_id, 'event_location', true);
@@ -94,6 +95,7 @@ get_header();
 								<div class="event-block-triangle"></div>
 								<div class="event-block">
 									<h3 class="event-title"><?php the_title(); ?></h3>
+									<h4><?php echo $event_period; ?> </h4>
 									<div class="event-info">
 
 										<div class="event-description">

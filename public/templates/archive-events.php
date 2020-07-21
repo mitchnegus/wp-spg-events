@@ -220,7 +220,7 @@ get_header();
 								$db_period_active = 'spg_' . $period . '_active';
 								if ( get_option( $db_period_active ) ) {
 
-									// PUT THE LOOP __HERE__
+									// Iterate over the loop for each period
 									$db_period_name = 'spg_' . $period . '_name';
 									$event_period = $year . ' ' . get_option( $db_period_name );
 									loop_over_period( $event_period );

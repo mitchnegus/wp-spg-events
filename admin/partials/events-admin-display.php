@@ -61,22 +61,22 @@ function check_required( $required ) {
  *
  * @since    1.0.0
  */
-function display_semester_dates_section( $args ) {
+function display_periods_section( $args ) {
 	?>
 
 	<p id="<?php echo esc_attr( $args['id'] ); ?>">
-		Set approximate start and end dates for the Fall and Spring semesters.
+		Set periods on the academic calendar (e.g. semesters, quarters, terms, etc.) to use when grouping events. 
 	</p>
 
 	<?php
 }
 
 /**
- * Display input boxes on the admin events settings page.
+ * Display text input boxes on the admin events settings page.
  *
  * @since 	1.0.0
  */
-function display_settings_text_input( $type, $name, $value, $required = false ) {
+function display_settings_text_input( $type, $name, $set_value, $required = false ) {
 
 	if ( $required ) {
 		$required = 'required';
@@ -85,8 +85,62 @@ function display_settings_text_input( $type, $name, $value, $required = false ) 
 	}
 	?>
 
-	<input type="<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $name ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ) ?>" <?php echo $required; ?>/>
+	<input type="<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $name ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $set_value ) ?>" <?php echo $required; ?>/>
 	<br>
+
+	<?php
+}
+
+/**
+ * Display checkbox input boxes on the admin events settings page.
+ *
+ * @since 	1.0.0
+ */
+function display_settings_checkbox_input( $name, $set_value ) {
+
+	if ( $set_value == 'active' ) {
+		$checked = 'checked="checked"';
+	} else {
+		$checked = '';
+	}
+	?>
+
+	<input type="checkbox" id="<?php echo esc_attr( $name ); ?>" name="<?php echo esc_attr( $name ); ?>" value="active" <?php echo $checked; ?>/>
+	<br>
+
+	<?php
+}
+
+/**
+ * Display select boxes on the admin events settings page.
+ *
+ * @since 	1.0.0
+ */
+function display_settings_select_input( $name, $select_options, $set_value ) {
+
+	?>
+
+	<select id="<?php echo esc_attr( $name ); ?>" name="<?php echo esc_attr( $name ); ?>">
+
+		<?php
+	 	foreach ( $select_options as $value ) {
+			// Determine if the currently set value matches this option
+			if ( $set_value == $value ) {
+				$selected = 'selected="selected"';
+			} else {
+				$selected = '';
+			}
+			?>
+
+				<option value="<?php echo esc_attr( $value ) ?>" <?php echo $selected; ?>>
+				<?php echo esc_html( $value ); ?>
+			</option>
+
+			<?php
+		}
+	?>
+
+	</select>
 
 	<?php
 }

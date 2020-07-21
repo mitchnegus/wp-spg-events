@@ -53,10 +53,10 @@ class Events_Admin {
 	 * @param      string    $version           The version of this plugin.
 	 * @param      array     $options           An array of the options set and added to the database by the plugin.
 	 * @param      array     $event_meta        An array of the meta fields for the custom event post type.
-	 * @param      array     $event_meta        An array of the meta fields for the custom event post type.
+	 * @param      array     $speaker_meta      An array of the meta fields for the custom speaker post type.
 	 * @param      array     $meta_titles       An array of the meta fields for the custom event post type.
 	 */
-	public function __construct( $plugin_name, $version, $options, $event_meta, $speaker_meta, $meta_titles ) {
+	public function __construct( $plugin_name, $version,  $options, $event_meta, $speaker_meta, $meta_titles ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
@@ -145,7 +145,7 @@ class Events_Admin {
 	public function add_settings() {
 
 		$this->register_settings();
-		$this->add_semester_settings();
+		$this->add_period_settings();
 
 	}
 
@@ -377,76 +377,100 @@ class Events_Admin {
 	}
 
 	/**
-	 * Add a section with fields for managing the semester start and end dates.
+	 * Add a section with fields for managing the periods.
 	 *
 	 * @since 	1.0.0
 	 * @access 	private
 	 */
-	private function add_semester_settings() {
+	private function add_period_settings() {
 
-		$section_id = 'semester-dates';
-		$section_label = 'Semester Dates';
+		$section_id = 'periods';
+		$section_label = 'Periods';
 		add_settings_section(
 			$section_id,
 			$section_label,
-			'SPG_Events\display_semester_dates_section',
+			'SPG_Events\display_periods_section',
 			$this->settings_page_slug
 		);
 
-		$fall_semester_start_id = $this->plugin_options['fall_semester_start'];
-		$fall_semester_start_label = 'Fall Semester Start';
+		$period_origin_year_id = $this->plugin_options['period_origin_year'];
+		$period_origin_year_label = 'Initial Event Year';
 		add_settings_field(
-			$fall_semester_start_id,
-			$fall_semester_start_label,
-			[$this, 'present_date_input_option'],
+			$period_origin_year_id,
+			$period_origin_year_label,
+			[$this, 'present_input_select_option'],
 			$this->settings_page_slug,
 			$section_id,
-			array( 'label_for' => $fall_semester_start_id )
+			array( 'label_for' => $period_origin_year_id )
 		);
-		$fall_semester_end_id = $this->plugin_options['fall_semester_end'];
-		$fall_semester_end_label = 'Fall Semester End';
-		add_settings_field(
-			$fall_semester_end_id,
-			$fall_semester_end_label,
-			[$this, 'present_date_input_option'],
-			$this->settings_page_slug,
-			$section_id,
-			array( 'label_for' => $fall_semester_end_id )
-		);
-		$spring_semester_start_id = $this->plugin_options['spring_semester_start'];
-		$spring_semester_start_label = 'Spring Semester Start';
-		add_settings_field(
-			$spring_semester_start_id,
-			$spring_semester_start_label,
-			[$this, 'present_date_input_option'],
-			$this->settings_page_slug,
-			$section_id,
-			array( 'label_for' => $spring_semester_start_id )
-		);
-		$spring_semester_end_id = $this->plugin_options['spring_semester_end'];
-		$spring_semester_end_label = 'Spring Semester End';
-		add_settings_field(
-			$spring_semester_end_id,
-			$spring_semester_end_label,
-			[$this, 'present_date_input_option'],
-			$this->settings_page_slug,
-			$section_id,
-			array( 'label_for' => $spring_semester_end_id )
-		);
+
+		foreach ( SPG_EVENTS_PERIODS as $period ) { 
+
+			$period_active_id = $this->plugin_options[$period . '_active'];
+			$period_active_label = 'Use Period ' . $period_num;
+			add_settings_field(
+				$period_active_id,
+				$period_active_label,
+				[$this, 'present_input_checkbox_option'],
+				$this->settings_page_slug,
+				$section_id,
+				array( 'label_for' => $period_active_id )
+			);
+			$period_name_id = $this->plugin_options[$period . '_name'];
+			$period_name_label = 'Name ' . $period_num;
+			add_settings_field(
+				$period_name_id,
+				$period_name_label,
+				[$this, 'present_input_text_option'],
+				$this->settings_page_slug,
+				$section_id,
+				array( 'label_for' => $period_name_id )
+			);
+
+		}
 	
 	}
 
 	/**
-	 * Present a text input for a date setting in the admin area.
+	 * Present a text input for a setting in the admin area.
 	 *
 	 * @since 1.0.0
 	 * @param    array      $args                 Information to include in the text input's HTML.
 	 */
-	public function present_date_input_option( $args ) {
+	public function present_input_text_option( $args ) {
 
 		$option_name = $args['label_for'];
 		$option_default = get_option( $option_name );
-		display_settings_text_input( 'date', $option_name, $option_default );
+		display_settings_text_input( 'text', $option_name, $option_default );
+
+	}
+
+	/**
+	 * Present a checkbox input for a setting in the admin area.
+	 *
+	 * @since 1.0.0
+	 * @param    array      $args                 Information to include in the text input's HTML.
+	 */
+	public function present_input_checkbox_option( $args ) {
+
+		$option_name = $args['label_for'];
+		$option_default = get_option( $option_name );
+		display_settings_checkbox_input( $option_name, $option_default );
+
+	}
+
+	/**
+	 * Present a select input for a setting in the admin area.
+	 *
+	 * @since 1.0.0
+	 * @param    array      $args                 Information to include in the text input's HTML.
+	 */
+	public function present_input_select_option( $args ) {
+
+		$option_name = $args['label_for'];
+		$option_values = range( 1990, date( 'Y') + 15 );
+		$option_default = get_option( $option_name );
+		display_settings_select_input( $option_name, $option_values, $option_default );
 
 	}
 
@@ -466,18 +490,37 @@ class Events_Admin {
 			$meta_value = $post_meta[ $meta_key ][0];
 			// Show the selection interface
 			$required = $meta['required'];
-			if ( $meta_key == 'event_semester' ) {
-				$orig_year = 2015;
-				$current_year = date( 'Y' );
-				$next_year = $current_year + 1;
-				$years = range( $orig_year, $next_year );
-				$semesters = array();
-				foreach ( $years as $year ) {
-					$semesters[] = $year . ' Fall';
-					$semesters[] = $year . ' Spring';
-					$semesters[] = $year . ' Summer';
+			if ( $meta_key == 'event_period' ) {
+				// Determine active periods from the settings
+				$active_periods = array();
+				foreach ( SPG_EVENTS_PERIODS as $period ) {
+					if ( get_option( $this->plugin_options[$period . '_active'] ) ) {
+						$active_periods[] = $period;
+					}
 				}
-				display_event_meta_select( $meta_key, $meta_title, $meta_value, array_reverse( $semesters ) );
+				// Populate the list with potential periods
+				$periods = array();
+				$orig_year = get_option( $this->plugin_options['period_origin_year'] );
+				$current_month = date( 'm' );
+				$current_year = date( 'Y' );
+				if ( $current_month > 9 ) {
+					// Show potential periods in the following year after September
+					$next_year = $current_year + 1;
+					$years = range( $orig_year, $next_year );
+				} else {
+					$years = range( $orig_year, $current_year );
+				}
+				foreach ( $years as $year ) {
+
+					foreach ( $active_periods as $active_period ) {
+						$period_name = $active_period . '_name';
+						$option_name = $this->plugin_options[$period_name];
+						$periods[] = $year . ' ' . get_option( $option_name );
+					}
+
+				}
+				$periods[] = '---';
+				display_event_meta_select( $meta_key, $meta_title, $meta_value, array_reverse( $periods ) );
 			} else if ( $meta_key == 'event_date' ) {
 				display_event_meta_input( 'date', $meta_key, $meta_title, $meta_value, $required);
 			} else if ( $meta_key == 'event_time' ) {

@@ -80,14 +80,15 @@ class Events {
 		//    -> Keys are the in-code reference names
 		//    -> Values are the option names in the database
 		$this->plugin_options = array(
-			'fall_semester_start'   => 'spg_fall_semester_start',
-			'fall_semester_end'     => 'spg_fall_semester_end',
-			'spring_semester_start' => 'spg_spring_semester_start',
-			'spring_semester_end'   => 'spg_spring_semester_end'
+			'period_origin_year' => 'spg_period_origin_year'
 		);
+		foreach ( SPG_EVENTS_PERIODS as $period ) {
+			$this->plugin_options[$period . '_active'] = 'spg_' . $period . '_active';
+			$this->plugin_options[$period . '_name'] = 'spg_' . $period . '_name';
+		}
 		// Create arrays of meta keys that are assigned to custom event posts and speakers
 		$this->event_meta = array(
-			array('meta_key' => 'event_semester', 'required' => true),
+			array('meta_key' => 'event_period', 'required' => true),
 			array('meta_key' => 'event_date', 'required' => true),
 			array('meta_key' => 'event_time', 'required' => false),
 		 	array('meta_key' => 'event_location', 'required' => false)
@@ -96,7 +97,7 @@ class Events {
 			array('meta_key' => 'speaker_thumbnail'),
 		);
 		$this->meta_titles = array(
-			'event_semester'    => 'Semester',
+			'event_period'      => 'Period',
 			'event_date'        => 'Date',
 			'event_time'        => 'Time',
 			'event_location'    => 'Location',
@@ -265,7 +266,7 @@ class Events {
 	 * Retrieve the options that are added to the database by the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    string    An array of options that are set by the plugin.
+	 * @return    array    An array of options that are set by the plugin.
 	 */
 	public function get_plugin_options() {
 	    return $this->plugin_options;
@@ -275,7 +276,7 @@ class Events {
 	 * Retrieve the custom event post meta keys.
 	 *
 	 * @since     1.0.0
-	 * @return    string    An array of event meta keys used by the plugin.
+	 * @return    array    An array of event meta keys used by the plugin.
 	 */
 	public function get_event_meta() {
 		return $this->event_meta;
@@ -285,7 +286,7 @@ class Events {
 	 * Retrieve the custom speaker taxonomy meta keys.
 	 *
 	 * @since     1.0.0
-	 * @return    string    An array of speaker meta keys used by the plugin.
+	 * @return    array    An array of speaker meta keys used by the plugin.
 	 */
 	public function get_speaker_meta() {
 		return $this->speaker_meta;
@@ -295,7 +296,7 @@ class Events {
 	 * Retrieve titles for the custom post meta keys.
 	 *
 	 * @since     1.0.0
-	 * @return    string    An array of titles for custom post meta keys.
+	 * @return    array    An array of titles for custom post meta keys.
 	 */
 	public function get_meta_titles() {
 		return $this->meta_titles;

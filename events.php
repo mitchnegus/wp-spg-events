@@ -47,13 +47,22 @@ require_once ABSPATH . 'wp-admin/includes/image.php';
 require_once ABSPATH . 'wp-admin/includes/file.php';
 require_once ABSPATH . 'wp-admin/includes/media.php';
 
-// Define some constants for use in the plugin
+// Define some path constants for use in the plugin
 if ( ! defined( 'WSE_PATH' ) ) {
 	define( 'WSE_PATH', plugin_dir_path( __FILE__ ) );
 }
 if ( ! defined( 'WSE_URL' ) ) {
 	define( 'WSE_URL', plugin_dir_url( __FILE__ ) );
 }
+
+// Define the period names in the database
+$period_count = 3;
+$periods = array();
+for ( $i = 1; $i <= $period_count; $i++ ) {
+	$periods[] = 'period_' . $i;
+}
+define( 'SPG_EVENTS_PERIODS', $periods );
+
 
 /**
  * The code that runs during plugin activation.

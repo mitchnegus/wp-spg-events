@@ -18,12 +18,33 @@
 }
 
 .wp-spg-events div.timeline {
-	border-left: 5px solid #dedede;
+	margin-top: 50px;
 	margin-left: 10px;
 	padding-left: 3px;
+	border-left: 5px solid #cccccc;
 }
 
-.wp-spg-events div.event {
+.wp-spg-events .event-period {
+	display: flex;
+	flex-direction: column;
+	width: 90%;
+	margin: 75px 0;
+	padding: 25px 0;
+	box-sizing: border-box;
+	border: 3px solid #eeeeee;
+	border-radius: 20px;
+	background-color: #fcfcfc;
+}
+
+.wp-spg-events .event-period h2 {
+	align-self: center;
+	width: 40%;
+	border-bottom: 1px solid #dddddd;
+	text-align: center;
+	font-weight: bold;
+}
+
+.wp-spg-events .event {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
@@ -32,29 +53,29 @@
 .wp-spg-events div.timeline-circle {
 	height: 30px;
 	width: 30px;
-	margin-left: -20px;
+	margin-left: -23.5px;
 	border: 3px solid white;
 	border-radius: 50%;
-	background-color: #cecece;
+	background-color: #cccccc;
 }
 
 .wp-spg-events div.event-block-triangle {
 	width: 0;
 	height: 0;
 	border-top: 35px solid transparent;
-	border-right: 20px solid #f7f7f7;
+	border-right: 20px solid #f0f0f0;
 	border-bottom: 35px solid transparent;
 	z-index: 1;
 }
 
 .wp-spg-events div.event-block {
 	min-height: 100px;
-	width: 80%;
+	width: 95%;
 	margin: 15px 0;
 	padding: 15px;
 	border-radius: 5px;
-	box-shadow: 2px 2px 4px #dddddd;
-	background-color: #f7f7f7;
+	box-shadow: 2px 2px 4px #dadada;
+	background-color: #f0f0f0;
 }
 
 

@@ -202,6 +202,7 @@ class Events_Public {
 				'event_date' => array( 'key' => 'event_date' ),
 				'event_time' => array( 'key' => 'event_time' )
 			));
+			$query->set('posts_per_page', 100);
 			$query->set( 'orderby', array(
 				'event_date' => 'DESC',
 				'event_time' => 'DESC'
